@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>超级美化</title>
+    <style>
+        body {
+            font-family: 'STKaiti', '楷体', cursive;
+            background-image: url('background.jpg'); /* 添加背景图像 */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-top: 50px;
+        }
+        
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #007bff; /* 蓝色边框 */
+            border-radius: 5px;
+            font-size: 18px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #0056b3; /* 焦点时蓝色加深 */
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #007bff; /* 蓝色按钮 */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            opacity: 0.9; /* 稍微提高不透明度 */
+        }
+        
+        button:hover {
+            background-color: #0056b3; /* 悬停时颜色变化 */
+        }
+
+        /* 警告框样式 */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background-color: rgba(255, 51, 51, 0.8); /* 使用半透明红色背景 */
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 999; /* 提高 z-index 以确保位于最上层 */
+        }
+
+        .alert.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            animation: fadeInOut 2s linear forwards; /* 添加渐显渐隐动画 */
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* 中文字体加载样式 */
+        @font-face {
+            font-family: 'STKaiti';
+            src: url('STKaiti.ttf') format('truetype');
+        }
+    </style>
+</head>
+<body>
+    <h1>获取微信号</h1>
+    <input type="text" id="inputField" placeholder="输入“我妈死了”">
+    <br><br>
+    <button onclick="showText()">确认</button>
+    
+    <!-- 警告框 -->
+    <div class="alert" id="alertBox">
+    </div>
+    
+    <script>
+        function showText() {
+            var input = document.getElementById("inputField").value;
+            var alertBox = document.getElementById("alertBox");
+
+            // 隐藏之前的提示
+            alertBox.classList.remove("active");
+
+            if (input === "我妈死了") {
+                // 复制显示内容
+                var textToCopy = "zql19192698754";
+
+                // 显示谢谢悬浮窗
+                alertBox.innerHTML = "杂种儿，承认就好，帮你复制微信号了！";
+                alertBox.classList.add("active");
+
+                // 复制内容到剪贴板
+                var textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                // 2秒后隐藏悬浮窗
+                setTimeout(function() {
+                    alertBox.classList.remove("active");
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

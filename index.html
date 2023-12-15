@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IQ测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            font-family: SimSun, '宋体', sans-serif;
+        }
+
+        #game-board {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .snake-segment {
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+        }
+
+        .food {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .control-button {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        #score {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>杂种李炬看看实力</h1>
+    <h1>IQ测试</h1>
+    <div id="game-board"></div>
+    <div id="controls">
+        <button class="control-button" id="up">↑</button>
+        <button class="control-button" id="left">←</button>
+        <button class="control-button" id="right">→</button>
+        <button class="control-button" id="down">↓</button>
+    </div>
+    <div id="score">分数: 0</div>
+    
+    <script>
+        const gameBoard = document.getElementById("game-board");
+        const snakeSegments = [];
+        let foodPosition = { x: 0, y: 0 };
+        let direction = "right";
+        let score = 0;
+
+        function createSegment(x, y) {
+            const segment = document.createElement("div");
+            segment.classList.add("snake-segment");
+            segment.style.left = x + "px";
+            segment.style.top = y + "px";
+            gameBoard.appendChild(segment);
+            snakeSegments.push(segment);
+        }
+
+        function createFood() {
+            foodPosition.x = Math.floor(Math.random() * 15) * 20;
+            foodPosition.y = Math.floor(Math.random() * 15) * 20;
+
+            const food = document.createElement("div");
+            food.classList.add("food");
+            food.style.left = foodPosition.x + "px";
+            food.style.top = foodPosition.y + "px";
+            gameBoard.appendChild(food);
+        }
+
+        function moveSnake() {
+            const head = snakeSegments[0];
+            let x = parseInt(head.style.left);
+            let y = parseInt(head.style.top);
+
+            switch (direction) {
+                case "up":
+                    y -= 20;
+                    break;
+                case "down":
+                    y += 20;
+                    break;
+                case "left":
+                    x -= 20;
+                    break;
+                case "right":
+                    x += 20;
+                    break;
+            }
+
+            // 边界处理
+            if (x < 0) x = 280;
+            if (x > 280) x = 0;
+            if (y < 0) y = 280;
+            if (y > 280) y = 0;
+
+            // 检查是否吃到食物
+            if (x === foodPosition.x && y === foodPosition.y) {
+                createSegment(x, y);
+                createFood();
+                score++;
+                document.getElementById("score").innerText = "分数: " + score;
+                if (score === 5) {
+                    alert("游戏结束！分数: " + score);
+                    window.location.href = "1.html"; // 跳转到1.html
+                    return;
+                }
+            } else {
+                const tail = snakeSegments.pop();
+                tail.style.left = x + "px";
+                tail.style.top = y + "px";
+                snakeSegments.unshift(tail);
+            }
+
+            // 检查是否游戏结束
+            for (let i = 1; i < snakeSegments.length; i++) {
+                if (x === parseInt(snakeSegments[i].style.left) && y === parseInt(snakeSegments[i].style.top)) {
+                    alert("垃圾！分数: " + score);
+                    window.location.href = "1.html"; // 跳转到1.html
+                    return;
+                }
+            }
+        }
+
+        // 方向键点击事件处理
+        document.getElementById("up").addEventListener("click", () => {
+            if (direction !== "down") direction = "up";
+        });
+        document.getElementById("left").addEventListener("click", () => {
+            if (direction !== "right") direction = "left";
+        });
+        document.getElementById("right").addEventListener("click", () => {
+            if (direction !== "left") direction = "right";
+        });
+        document.getElementById("down").addEventListener("click", () => {
+            if (direction !== "up") direction = "down";
+        });
+
+        createSegment(60, 0);
+        createFood();
+
+        setInterval(() => {
+            moveSnake();
+        }, 200);
+    </script>
+</body>
+</html>
